@@ -98,7 +98,7 @@ protected:
 public:
     float calculatePerformance() override
     {
-        float s =getSpeed();
+        float s = getSpeed();
         float c = getCapacity();
         float score = (s * 10) + (c * 1);
         return score;
@@ -109,10 +109,11 @@ class SupportVehicle : public Car
 {
 protected:
     int crew_size, reliability_rating;
+
 public:
     float calculatePerformance() override
     {
-        float s =getSpeed();
+        float s = getSpeed();
         float c = getCapacity();
         float score = (s * 5) + (c * 5);
         return score;
@@ -129,7 +130,7 @@ void checkIn(Car *c)
     c->setCarNumber(carnumber);
     cin.ignore();
     cout << "Enter car fullname" << endl;
-    getline(cin,fullName);
+    getline(cin, fullName);
     c->setFullName(fullName);
     cout << "Enter age (must be positive)" << endl;
     cin >> age;
@@ -145,59 +146,84 @@ void checkIn(Car *c)
     cin >> capacity;
     c->setCapacity(capacity);
 
-    // calculate Perfomance Score
+    float score = c->calculatePerformance();
     cout << "Car Checked In Successfully!" << endl;
+    cout << "Performance Score: " << score << endl;
+}
+
+void displayGarage(Car *garage[], int size)
+{
+    cout << "================Garage================" << endl;
+    for (int i = 0; i < size; i++)
+    {
+        Car *c = garage[i];
+        cout << "Car Number: " << c->getCarNumber() << endl;
+        cout << "Full Name: " << c->getFullName() << endl;
+        cout << "Age: " << c->getAge() << endl;
+        cout << "Racing Team: " << c->getRacingTeam() << endl;
+        cout << "Speed: " << c->getSpeed() << endl;
+        cout << "Capacity: " << c->getCapacity() << endl;
+        cout << "Performance Score: " << c->calculatePerformance() << endl;
+        cout << "-------------------------------------" << endl;
+    }
 }
 
 int main()
 {
-    int choice;
-    cout << "================Garage Management System================" << endl;
-    cout << "1.Check In a Car" << endl
-         << "2.View the Garage" << endl
-         << "3.Tune-Up (Update a car)" << endl;
-    cout << "4. Retire" << endl
-         << "5.Find a Car" << endl
-         << "6.Garage Report" << endl;
-    cin >> choice;
-    switch (choice)
+    int i=0;
+    while (1)
     {
-    case 1:
-        Car *c=nullptr;
-        cout << "Enter the type of car (1 for Racer, 2 for Support Vehicle): ";
-        int carType;
-        cin >> carType;
-        if (carType == 1)
+        Car *garage[100];
+        int choice;
+        cout << "================Garage Management System================" << endl;
+        cout << "1.Check In a Car" << endl
+             << "2.View the Garage" << endl
+             << "3.Tune-Up (Update a car)" << endl;
+        cout << "4. Retire" << endl
+             << "5.Find a Car" << endl
+             << "6.Garage Report" << endl;
+        cin >> choice;
+        switch (choice)
         {
-            c = new Racer();
+        case 1:
+            Car *c = nullptr;
+            cout << "Enter the type of car (1 for Racer, 2 for Support Vehicle): ";
+            int carType;
+            cin >> carType;
+            if (carType == 1)
+            {
+                c = new Racer();
+            }
+            else if (carType == 2)
+            {
+                c = new SupportVehicle();
+            }
+            else
+            {
+                cout << "Invalid car type" << endl;
+                return 0;
+            }
+            checkIn(c);
+            garage[i]= c;
+            i++;
+            break;
+        case 2:
+            displayGarage(garage, i);
+            break;
+        case 3:
+            /* code */
+            break;
+        case 4:
+            /* code */
+            break;
+        case 5:
+            /* code */
+            break;
+        case 6:
+            /* code */
+            break;
+        default:
+            cout << "Invalid choice, Bye!" << endl;
         }
-        else if (carType == 2)
-        {
-            c = new SupportVehicle();
-        }
-        else
-        {
-            cout << "Invalid car type" << endl;
-            return 0;
-        }
-        checkIn(c);
-        break;
-    case 2:
-        /* code */
-        break;
-    case 3:
-        /* code */
-        break;
-    case 4:
-        /* code */
-        break;
-    case 5:
-        /* code */
-        break;
-    case 6:
-        /* code */
-        break;
-    default:
-        break;
     }
 }
