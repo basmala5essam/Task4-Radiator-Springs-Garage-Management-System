@@ -167,10 +167,187 @@ void displayGarage(Car *garage[], int size)
         cout << "-------------------------------------" << endl;
     }
 }
+void editCar(Car *c)
+{
+    cout << "Which attribute do you want to edit?" << endl;
+    cout << "1. Car Number" << endl;
+    cout << "2. Full Name" << endl;
+    cout << "3. Age" << endl;
+    cout << "4. Racing Team" << endl;
+    cout << "5. Speed" << endl;
+    cout << "6. Capacity" << endl;
+    int choice;
+    cin >> choice;
+    switch (choice)
+    {
+    case 1:
+    {
+        int carnumber;
+        cout << "Enter new car number: ";
+        cin >> carnumber;
+        c->setCarNumber(carnumber);
+        break;
+    }
+
+    case 2:
+    {
+        string fullName;
+        cin.ignore();
+        cout << "Enter new full name: ";
+        getline(cin, fullName);
+        c->setFullName(fullName);
+        break;
+    }
+
+    case 3:
+    {
+        int age;
+        cout << "Enter new age: ";
+        cin >> age;
+        c->setAge(age);
+        break;
+    }
+
+    case 4:
+    {
+        string racingTeam;
+        cin.ignore();
+        cout << "Enter new racing team: ";
+        getline(cin, racingTeam);
+        c->setRacingTeam(racingTeam);
+        break;
+    }
+
+    case 5:
+    {
+        float speed;
+        cout << "Enter new speed: ";
+        cin >> speed;
+        c->setSpeed(speed);
+        break;
+    }
+
+    case 6:
+    {
+        float capacity;
+        cout << "Enter new capacity: ";
+        cin >> capacity;
+        c->setCapacity(capacity);
+        break;
+    }
+
+    default:
+        cout << "Invalid choice" << endl;
+    }
+}
+void tuneUp(Car *garage[], int size)
+{
+    int carNumber;
+    cout << "Enter car number to tune-up: ";
+    cin >> carNumber;
+    for (int i = 0; i < size; i++)
+    {
+        Car *c = garage[i];
+        if (c->getCarNumber() == carNumber)
+        {
+            editCar(c);
+            cout << "Car Tuned-Up Successfully!" << endl;
+            return;
+        }
+    }
+    cout << "Car not found!" << endl;
+}
+void retire(Car *garage[], int &size)
+{
+    int carNumber;
+    cout << "Enter car number to retire: ";
+    cin >> carNumber;
+    for (int i = 0; i < size; i++)
+    {
+        Car *c = garage[i];
+        if (c->getCarNumber() == carNumber)
+        {
+            delete c;
+            for (int j = i; j < size - 1; j++)
+            {
+                garage[j] = garage[j + 1];
+            }
+            size--;
+            cout << "Car Retired Successfully!" << endl;
+            return;
+        }
+    }
+    cout << "Car not found!" << endl;
+}
+void findCar(Car *garage[], int size)
+{
+    cout << "Want to search cars by name or car number? (1 for name, 2 for car number): ";
+    int searchChoice;
+    cin >> searchChoice;
+    if (searchChoice == 1)
+    {
+        string fullName;
+        cin.ignore();
+        cout << "Enter full name to find: ";
+        getline(cin, fullName);
+        for (int i = 0; i < size; i++)
+        {
+            Car *c = garage[i];
+            if (c->getFullName() == fullName)
+            {
+                cout << "Car Found!" << endl;
+                cout << "Car Number: " << c->getCarNumber() << endl;
+                cout << "Full Name: " << c->getFullName() << endl;
+                cout << "Age: " << c->getAge() << endl;
+                cout << "Racing Team: " << c->getRacingTeam() << endl;
+                cout << "Speed: " << c->getSpeed() << endl;
+                cout << "Capacity: " << c->getCapacity() << endl;
+                cout << "Performance Score: " << c->calculatePerformance() << endl;
+                return;
+            }
+        }
+    }
+    else if (searchChoice == 2)
+    {
+        int carNumber;
+        cout << "Enter car number to find: ";
+        cin >> carNumber;
+        for (int i = 0; i < size; i++)
+        {
+            Car *c = garage[i];
+            if (c->getCarNumber() == carNumber)
+            {
+                cout << "Car Found!" << endl;
+                cout << "Car Number: " << c->getCarNumber() << endl;
+                cout << "Full Name: " << c->getFullName() << endl;
+                cout << "Age: " << c->getAge() << endl;
+                cout << "Racing Team: " << c->getRacingTeam() << endl;
+                cout << "Speed: " << c->getSpeed() << endl;
+                cout << "Capacity: " << c->getCapacity() << endl;
+                cout << "Performance Score: " << c->calculatePerformance() << endl;
+                return;
+            }
+        }
+        cout << "Car not found!" << endl;
+    }
+}
+void garageReport(Car *garage[],int size)
+{
+    int averagescore=0;
+    cout << "================Garage Report================" << endl;
+    cout << "Total Cars in Garage: " << size << endl;
+    for (int i = 0; i < size; i++)
+    {
+        Car *c = garage[i];
+        averagescore += c->calculatePerformance();
+    }
+    averagescore /= size;
+    cout << "Average Performance Score: " << averagescore << endl;
+}
 
 int main()
 {
-    int i=0;
+    int i = 0;
     while (1)
     {
         Car *garage[100];
@@ -182,6 +359,7 @@ int main()
         cout << "4. Retire" << endl
              << "5.Find a Car" << endl
              << "6.Garage Report" << endl;
+        cout << "7.Quit" << endl;
         cin >> choice;
         switch (choice)
         {
@@ -204,26 +382,29 @@ int main()
                 return 0;
             }
             checkIn(c);
-            garage[i]= c;
+            garage[i] = c;
             i++;
             break;
         case 2:
             displayGarage(garage, i);
             break;
         case 3:
-            /* code */
+            tuneUp(garage, i);
             break;
         case 4:
-            /* code */
+            retire(garage, i);
             break;
         case 5:
-            /* code */
+            findCar(garage, i);
             break;
         case 6:
-            /* code */
+            garageReport(garage, i);
             break;
+        case 7:
+            cout << "Quiting...Bye!" << endl;
+            return 0;
         default:
-            cout << "Invalid choice, Bye!" << endl;
+            cout << "Invalid choice" << endl;
         }
     }
 }
